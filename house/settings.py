@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # "pages.apps.PagesConfig", //OTRA FORMA DE CONECTAR LA APP CON NUESTRO PROYECTO PRINCIPAL
     "pages",
+    "listings",
+    "realtors",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
