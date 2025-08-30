@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Listing
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 # Create your views here.
@@ -21,4 +21,9 @@ def search(request):
 
 
 def listing(request,  listing_id):
-    return render(request, 'listings/listing.html')
+    # listing = Listing.objects.first(id=listing_id)
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    return render(request, 'listings/listing.html', {
+        "listing": listing
+    })
