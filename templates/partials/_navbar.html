@@ -24,16 +24,35 @@
             </ul>
 
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item mr-3">
-                    <a class="nav-link" href="register.html">
-                        <i class="fas fa-user-plus"></i> Register</a>
+                {% if user.is_authenticated %}
+                <li class="nav-item mr-3 {%if  'dashboard' in request.path%} active  {% else %} '' {%endif%} ">
+                    <a class="nav-link" href="{% url 'dashboard' %}">
+                        Welcome {{user.username}} to your Dashboard </a>
                 </li>
                 <li class="nav-item mr-3">
-                    <a class="nav-link" href="login.html">
+                    <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form action="{% url 'logout' %}" id="logout" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="">
+
+                    </form>
+
+                </li>
+
+                {% else %}
+                <li class="nav-item mr-3 {%if  'register' in request.path%} active  {% else %} '' {%endif%} ">
+                    <a class="nav-link" href="{% url 'register' %}">
+                        <i class="fas fa-user-plus"></i> Register</a>
+                </li>
+                <li class="nav-item mr-3 {%if  'login' in request.path%} active  {% else %} '' {%endif%} ">
+                    <a class="nav-link" href="{% url 'login' %}">
                         <i class="fas fa-sign-in-alt"></i>
 
                         Login</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>

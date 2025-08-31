@@ -1,4 +1,13 @@
 {% extends "base.html" %}
+
+
+
+{% block title %}
+
+Search Results
+{% endblock %}
+
+
 {% load humanize %}
 
 {% block content %}
@@ -27,11 +36,7 @@
                             <select name="state" class="form-control">
                                 <option selected="true" disabled="disabled">State (All)</option>
                                 {% for key,value in state_choices.items %}
-                                <option value="{{key}}"
-                                    {% if key == values.state   %}
-                                    selected
-                                    {% endif %}
-                                    >
+                                <option value="{{key}}" {% if key==values.state %} selected {% endif %}>
                                     {{value}}</option>
                                 {% endfor %}
 
@@ -45,12 +50,8 @@
                             <select name="bedrooms" class="form-control">
                                 <option selected="true" disabled="disabled">Bedrooms (All)</option>
                                 {% for key,value in bedroom_choices.items %}
-                                <option value="{{key}}"
-                                   {% if key == values.bedrooms   %}
-                                    selected
-                                    {% endif %}
-
-                                >{{value}}</option>
+                                <option value="{{key}}" {% if key==values.bedrooms %} selected {% endif %}>{{value}}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -58,12 +59,8 @@
                             <select name="price" class="form-control" id="type">
                                 <option selected="true" disabled="disabled">Max Price (Any)</option>
                                 {% for key,value in price_choices.items %}
-                                <option value="{{key}}"
-                                   {% if key == values.price   %}
-                                    selected
-                                    {% endif %}
-                                
-                                >${{value | intcomma}}</option>
+                                <option value="{{key}}" {% if key==values.price %} selected {% endif %}>${{value |
+                                    intcomma}}</option>
                                 {% endfor %}
                             </select>
                         </div>
