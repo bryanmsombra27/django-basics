@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    # os.getenv("ALLOWED_HOST", "127.0.0.1")
+    os.getenv("ALLOWED_HOST", "127.0.0.1"),
     "127.0.0.1",
     "localhost",
 
