@@ -1,0 +1,33 @@
+:root,
+html[data-theme="light"],
+[data-theme="dark"] {
+  --primary: #10284e;
+  --secondary: #30caa0;
+}
+
+#header {
+  height: 50px;
+  background-color: var(--primary);
+  color: white;
+}
+#branding h1 {
+  color: white;
+}
+a:link,
+a:visited {
+  color: var(--primary);
+}
+
+div.breadcrumbs {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+div.breadcrumbs a {
+  color: #333;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background-color: var(--secondary);
+}
