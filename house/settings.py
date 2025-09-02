@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+import ssl
+import certifi
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     "accounts",
     "listings",
     "realtors",
+    "contacts",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -150,3 +153,15 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
 
 }
+
+# EMAIL CONFIG
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.ethereal.email"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "carolyne49@ethereal.email"
+EMAIL_HOST_PASSWORD = "V56nKwrKS7hxbrH6ya"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
+EMAIL_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
