@@ -4,13 +4,13 @@ services:
   name: mysite
   runtime: python
   buildCommand: './build.sh'
-  startCommand: 'python -m gunicorn house.asgi:application -k uvicorn.workers.UvicornWorker'
+  startCommand: 'gunicorn house.wsgi:application'
   envVars:
 
-  - key: SECRET_key
+  - key: SECRET_KEY
     value: 'django-insecure-u^pf+cl2de%6$+y+6kvsz&=3t4g&sbho-(#s6eiq0y!g21q$&i'
-  - key: ALLOWED_HOSTS
-    value: 'https://django-basics-e20f.onrender.com'
+  - key: ALLOWED_HOST
+    value: 'django-basics-e20f.onrender.com'
   - key: EMAIL_HOST
     value: 'smtp.ethereal.email'
   - key: EMAIL_PORT
