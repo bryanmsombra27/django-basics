@@ -14,6 +14,7 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 import ssl
 import certifi
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,12 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u^pf+cl2de%6$+y+6kvsz&=3t4g&sbho-(#s6eiq0y!g21q$&i'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.getenv("ALLOWED_HOST")
+
+]
 
 
 # Application definition
@@ -137,8 +141,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 #  #SE CONFIGURA PARA PROD solo en producción cuando corres collectstatic (para juntar todos los estáticos en una sola carpeta lista para servir).
-# STATIC_ROOT = BASE_DIR / "static"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "static"
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -156,12 +160,18 @@ MESSAGE_TAGS = {
 
 # EMAIL CONFIG
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.ethereal.email"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "carolyne49@ethereal.email"
-EMAIL_HOST_PASSWORD = "V56nKwrKS7hxbrH6ya"
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
 EMAIL_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
