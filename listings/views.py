@@ -3,6 +3,24 @@ from .models import Listing
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 # Create your views here.
 from .choices import price_choices, bedroom_choices, state_choices
+from django.views.generic import ListView
+
+
+class ListingsView(ListView):
+    model = Listing
+    template_name = "listings/listings.html"
+    context_object_name = "listings"
+    ordering = ["-list_date"]
+    paginate_by = 1
+
+    def get_queryset(self):
+        return Listing.objects.filter(is_published=True).order_by("-list_date")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Sobrescribimos listings para que sea el objeto Page
+        context["listings"] = context["page_obj"]
+        return context
 
 
 def index(request):
