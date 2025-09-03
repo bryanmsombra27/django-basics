@@ -3,7 +3,7 @@ from .models import Listing
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 # Create your views here.
 from .choices import price_choices, bedroom_choices, state_choices
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 class ListingsView(ListView):
@@ -11,7 +11,7 @@ class ListingsView(ListView):
     template_name = "listings/listings.html"
     context_object_name = "listings"
     ordering = ["-list_date"]
-    paginate_by = 1
+    paginate_by = 3
 
     def get_queryset(self):
         return Listing.objects.filter(is_published=True).order_by("-list_date")
@@ -23,62 +23,49 @@ class ListingsView(ListView):
         return context
 
 
-def index(request):
-    listings = Listing.objects.all().order_by(
-        "-list_date").filter(is_published=True)
-    paginator = Paginator(listings, 6)
-    page = request.GET.get("page")
-    paged_listings = paginator.get_page(page)
+class SearchView(ListView):
+    model = Listing
+    template_name = "listings/search.html"
+    context_object_name = "listings"
+    ordering = ["-list_date"]
 
-    return render(request, 'listings/listings.html', {
-        'listings': paged_listings,
+    def get_queryset(self):
+        queryset = Listing.objects.order_by("-list_date")
+        params = self.request.GET
 
-    })
-
-
-def search(request):
-    queryset_list = Listing.objects.order_by("-list_date")
-
-    # keywords
-    if 'keywords' in request.GET:
-        keywords = request.GET.get("keywords")
+        keywords = params.get("keywords")
         if keywords:
-            queryset_list = queryset_list.filter(
-                description__icontains=keywords)
-    # city
-    if 'city' in request.GET:
-        city = request.GET.get("city")
+            queryset = queryset.filter(description__icontains=keywords)
+
+        city = params.get("city")
         if city:
-            queryset_list = queryset_list.filter(city__iexact=city)
-    # state
-    if 'state' in request.GET:
-        state = request.GET.get("state")
+            queryset = queryset.filter(city__iexact=city)
+
+        state = params.get("state")
         if state:
-            queryset_list = queryset_list.filter(state__iexact=state)
-    # bedrooms
-    if 'bedrooms' in request.GET:
-        bedrooms = request.GET.get("bedrooms")
+            queryset = queryset.filter(state__iexact=state)
+
+        bedrooms = params.get("bedrooms")
         if bedrooms:
-            queryset_list = queryset_list.filter(bedrooms__lte=bedrooms)
-    # price
-    if 'price' in request.GET:
-        price = request.GET.get("price")
+            queryset = queryset.filter(bedrooms__lte=bedrooms)
+
+        price = params.get("price")
         if price:
-            queryset_list = queryset_list.filter(price__lte=price)
+            queryset = queryset.filter(price__lte=price)
 
-    return render(request, 'listings/search.html', {
-        "price_choices": price_choices,
-        "bedroom_choices": bedroom_choices,
-        "state_choices": state_choices,
-        "listings": queryset_list,
-        "values": request.GET
-    })
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["price_choices"] = price_choices
+        context["bedroom_choices"] = bedroom_choices
+        context["state_choices"] = state_choices
+        context["values"] = self.request.GET.dict()
+        return context
 
 
-def listing(request,  listing_id):
-    # listing = Listing.objects.first(id=listing_id)
-    listing = get_object_or_404(Listing, pk=listing_id)
-
-    return render(request, 'listings/listing.html', {
-        "listing": listing
-    })
+class ListingDetailView(DetailView):
+    queryset = Listing.objects.all()
+    context_object_name = "listing"
+    template_name = "listings/listing.html"
+    pk_url_kwarg = "listing_id"

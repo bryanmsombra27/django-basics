@@ -4,26 +4,31 @@ from django.shortcuts import render
 from listings.models import Listing
 from realtors.models import Realtor
 from listings.choices import price_choices, bedroom_choices, state_choices
+from django.views.generic import ListView
 
 
-def index(request):
-    listings = Listing.objects.order_by("-list_date").filter(
-        is_published=True)[:3]
+class HomeView(ListView):
+    model = Listing
+    template_name = "pages/index.html"
+    context_object_name = "listings"
 
-    return render(request, 'pages/index.html', {
-        "listings": listings,
-        "price_choices": price_choices,
-        "bedroom_choices": bedroom_choices,
-        "state_choices": state_choices
-    })
+    def get_queryset(self):
+        return super().get_queryset().order_by("-list_date").filter(is_published=True)[:3]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["price_choices"] = price_choices
+        context["bedroom_choices"] = bedroom_choices
+        context["state_choices"] = state_choices
+        return context
 
 
-def about(request):
-    realtors = Realtor.objects.all()
+class AboutView(ListView):
+    model = Realtor
+    template_name = "pages/about.html"
+    context_object_name = "realtors"
 
-    mvp_realtors = realtors.filter(is_mvp=True)
-
-    return render(request, 'pages/about.html', {
-        "realtors": realtors,
-        "mvp_realtors": mvp_realtors
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["mvp_realtors"] = Realtor.objects.all().filter(is_mvp=True)
+        return context

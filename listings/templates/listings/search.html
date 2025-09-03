@@ -36,7 +36,7 @@ Search Results
                             <select name="state" class="form-control">
                                 <option selected="true" disabled="disabled">State (All)</option>
                                 {% for key,value in state_choices.items %}
-                                <option value="{{key}}" {% if key==values.state %} selected {% endif %}>
+                                <option value="{{key}}" {% if key == values.state %} selected {% endif %}>
                                     {{value}}</option>
                                 {% endfor %}
 
@@ -50,7 +50,7 @@ Search Results
                             <select name="bedrooms" class="form-control">
                                 <option selected="true" disabled="disabled">Bedrooms (All)</option>
                                 {% for key,value in bedroom_choices.items %}
-                                <option value="{{key}}" {% if key==values.bedrooms %} selected {% endif %}>{{value}}
+                                <option value="{{key}}" {% if key == values.bedrooms %} selected {% endif %}>{{value}}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -59,7 +59,7 @@ Search Results
                             <select name="price" class="form-control" id="type">
                                 <option selected="true" disabled="disabled">Max Price (Any)</option>
                                 {% for key,value in price_choices.items %}
-                                <option value="{{key}}" {% if key==values.price %} selected {% endif %}>${{value |
+                                <option value="{{key}}" {% if key == values.price %} selected {% endif %}>${{value |
                                     intcomma}}</option>
                                 {% endfor %}
                             </select>
